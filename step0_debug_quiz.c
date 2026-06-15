@@ -16,7 +16,9 @@ int main(void) {
     fp = NULL;                        // バグ② ファイルを閉じていない
 
     FILE *fp2 = fopen("log.txt", "w");
-    if (fp2 == NULL) { return 1; }
+    if (fp2 == NULL) {
+        return 1;
+    }
 
     fprintf(fp2, "ログ: %s", line);
     fclose(fp2);
@@ -36,12 +38,21 @@ int main(void) {
  *
  *
  *
- * ① fopen 直後に NULLチェックがない → fp が NULL のまま fgets を呼ぶとクラッシュ
- *    修正: if (fp == NULL) { fprintf(stderr, "開けません\n"); return 1; }
+ * ① fopen 直後に NULLチェックがない
+ *    → fp が NULL のまま fgets を呼ぶとクラッシュ
+ *    修正: if (fp == NULL) {
+ *              fprintf(stderr, "開けません\n");
+ *              return 1;
+ *          }
  *
- * ② fclose を呼ばずに fp = NULL している → ファイルが正しく閉じられない
+ * ② fclose を呼ばずに fp = NULL している
+ *    → ファイルが正しく閉じられない
  *    修正: fclose(fp); の後に fp = NULL;
  *
- * ③ fp3 の NULLチェックがない → 存在しないディレクトリへの書き込みでクラッシュ
- *    修正: if (fp3 == NULL) { fprintf(stderr, "開けません\n"); return 1; }
+ * ③ fp3 の NULLチェックがない
+ *    → 存在しないディレクトリへの書き込みでクラッシュ
+ *    修正: if (fp3 == NULL) {
+ *              fprintf(stderr, "開けません\n");
+ *              return 1;
+ *          }
  */
